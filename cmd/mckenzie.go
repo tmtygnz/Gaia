@@ -10,6 +10,9 @@ import (
 	"mckenzie/provider"
 )
 
+/*
+contains code that's needed for the main logic to run
+*/
 func startup() {
 	log.Println("Loading .env")
 	err := godotenv.Load(".env")
@@ -24,5 +27,5 @@ func main() {
 	defectFeatureHandler := defect_features.NewDefectFeatureHandler(databaseInstance)
 	productFeatureHandler := product_features.NewProductFeatureHandler(databaseInstance)
 
-	inline_rejection.IRRestInterface(defectFeatureHandler)
+	inline_rejection.IRRestInterface(defectFeatureHandler, productFeatureHandler)
 }

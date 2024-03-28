@@ -1,12 +1,20 @@
 package inline_rejection
 
 import (
+	"log"
 	defect_features "mckenzie/interal/features/defect-features"
+	product_features "mckenzie/interal/features/product-features"
 	feature_handler "mckenzie/interal/inline-rejection/feature-handler"
 	"net/http"
 )
 
-func IRRestInterface(defectFeature *defect_features.DefectFeatureHandler) {
+func IRRestInterface(defectFeature *defect_features.DefectFeatureHandler, productFeature *product_features.ProductFeatureHandler) {
 	feature_handler.NewDefectRestHandler(defectFeature)
-	http.ListenAndServe(":8080", nil)
+	feature_handler.NewProductRestHandler(productFeature)
+	log.Println("Running at :8080")
+
+	err := http.ListenAndServe(":8080", nil)
+	if err != nil {
+		log.Panicln("Server didn't start", err)
+	}
 }
