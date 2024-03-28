@@ -1,10 +1,11 @@
 package main
 
 import (
-	"fmt"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	"log"
+	defect_features "mckenzie/interal/features/defect-features"
+	inline_rejection "mckenzie/interal/inline-rejection"
 	"mckenzie/provider"
 )
 
@@ -18,6 +19,8 @@ func startup() {
 
 func main() {
 	startup()
-	_ = provider.NewDatabase()
-	fmt.Println("Should start server")
+	databaseInstance := provider.NewDatabase()
+	defectFeatureHandler := defect_features.NewDefectFeatureHandler(databaseInstance)
+
+	inline_rejection.IRRestInterface(defectFeatureHandler)
 }
