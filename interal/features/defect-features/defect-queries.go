@@ -3,8 +3,8 @@ package defect_features
 import (
 	"github.com/go-jet/jet/v2/postgres"
 	"log"
-	"mckenzie/entities"
-	"mckenzie/jet/postgres/public/table"
+	"mckenzie/interal/entities"
+	"mckenzie/interal/jet/postgres/public/table"
 	"mckenzie/provider"
 )
 
