@@ -7,6 +7,11 @@ import (
 	"os"
 )
 
+type IDBProvider interface {
+	Query(query postgres.SelectStatement, tfo interface{}) error
+	Exec(query postgres.Statement, tfo interface{}) error
+}
+
 type DBProvider struct {
 	database *sql.DB
 }

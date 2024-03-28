@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
 	"log"
 	"mckenzie/provider"
 )
@@ -15,10 +16,8 @@ func startup() {
 	}
 }
 
-// ! Follow returning structs and accepting interfaces!
 func main() {
 	startup()
-	database := provider.NewDatabase()
-
+	_ = provider.NewDatabase()
 	fmt.Println("Should start server")
 }
