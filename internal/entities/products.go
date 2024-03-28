@@ -1,6 +1,6 @@
 package entities
 
-import "mckenzie/interal/jet/postgres/public/model"
+import "mckenzie/internal/jet/postgres/public/model"
 
 type DProduct struct {
 	model.Products

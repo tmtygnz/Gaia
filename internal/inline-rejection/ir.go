@@ -2,9 +2,9 @@ package inline_rejection
 
 import (
 	"log"
-	defect_features "mckenzie/interal/features/defect-features"
-	product_features "mckenzie/interal/features/product-features"
-	feature_handler "mckenzie/interal/inline-rejection/feature-handler"
+	defect_features "mckenzie/internal/features/defect-features"
+	product_features "mckenzie/internal/features/product-features"
+	feature_handler "mckenzie/internal/inline-rejection/feature-handler"
 	"net/http"
 )
 

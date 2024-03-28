@@ -3,8 +3,8 @@ package feature_handler
 import (
 	"encoding/json"
 	"log"
-	"mckenzie/interal/entities"
-	defect_features "mckenzie/interal/features/defect-features"
+	"mckenzie/internal/entities"
+	defect_features "mckenzie/internal/features/defect-features"
 	"net/http"
 	"strconv"
 )
