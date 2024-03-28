@@ -6,6 +6,7 @@ import (
 	"mckenzie/interal/entities"
 	defect_features "mckenzie/interal/features/defect-features"
 	"net/http"
+	"strconv"
 )
 
 type DefectFeature interface {
@@ -22,6 +23,7 @@ func NewDefectRestHandler(defectFeatHandler *defect_features.DefectFeatureHandle
 		defectFeatureHandler: defectFeatHandler,
 	}
 	http.HandleFunc("/defect", handler.FetchAllDefectHandler)
+	http.HandleFunc("/defect/by/{id}", handler.FetchDefectByIdHandler)
 }
 
 func (restHandler *DefectRestHandler) FetchAllDefectHandler(writer http.ResponseWriter, request *http.Request) {
@@ -30,9 +32,34 @@ func (restHandler *DefectRestHandler) FetchAllDefectHandler(writer http.Response
 
 		allDefectsBytes, err := json.Marshal(allDefects)
 		if err != nil {
-			log.Panicln("Error marshaling all defects", err)
+			log.Println("Error marshaling all defects", err)
 			writer.WriteHeader(http.StatusInternalServerError)
 		}
 		writer.Write(allDefectsBytes)
+	}
+}
+
+func (restHandler *DefectRestHandler) FetchDefectByIdHandler(writer http.ResponseWriter, request *http.Request) {
+	switch request.Method {
+	case http.MethodGet:
+		idStr := request.URL.Query().Get("id")
+		if idStr == "" {
+			writer.WriteHeader(http.StatusUnprocessableEntity)
+			writer.Write([]byte("Missing id parameter"))
+		}
+
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			writer.WriteHeader(http.StatusInternalServerError)
+		}
+		defect := restHandler.defectFeatureHandler.FetchDefectById(int64(id))
+
+		defectBytes, err := json.Marshal(defect)
+		if err != nil {
+			log.Println("Error marshaling defect", err)
+			writer.WriteHeader(http.StatusInternalServerError)
+		}
+
+		writer.Write(defectBytes)
 	}
 }
