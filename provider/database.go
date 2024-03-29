@@ -19,12 +19,12 @@ type DBProvider struct {
 func NewDatabase() *DBProvider {
 	db, err := sql.Open("postgres", os.Getenv("DB_STR"))
 	if err != nil {
-		log.Fatal("Cannot connect to postgres", err)
+		log.Panic("Cannot connect to postgres", err)
 	}
 
 	err = db.Ping()
 	if err != nil {
-		log.Fatal("Didn't connect to the database", err)
+		log.Panic("Didn't connect to the database", err)
 	}
 
 	return &DBProvider{

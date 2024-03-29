@@ -17,7 +17,7 @@ func startup() {
 	log.Println("Loading .env")
 	err := godotenv.Load(".env")
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 }
 

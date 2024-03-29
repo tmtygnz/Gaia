@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"mackenzie/internal/entities"
-	product_features "mackenzie/internal/features/product_features"
+	"mackenzie/internal/features/product_features"
 	"net/http"
 	"strconv"
 )
@@ -22,7 +22,7 @@ func NewProductRestHandler(productFeatHandler *product_features.ProductFeatureHa
 	handler := &ProductRestHandler{
 		productFeatureHandler: productFeatHandler,
 	}
-	http.HandleFunc("/prodct", handler.FetchAllProductHandler)
+	http.HandleFunc("/product", handler.FetchAllProductHandler)
 	http.HandleFunc("/product/by/{id}", handler.FetchProductByIdHandler)
 }
 
@@ -37,7 +37,9 @@ func (restHandler *ProductRestHandler) FetchAllProductHandler(writer http.Respon
 			writer.WriteHeader(http.StatusInternalServerError)
 		}
 
-		writer.Write(allProductsBytes)
+		if _, err = writer.Write(allProductsBytes); err != nil {
+			log.Panicln()
+		}
 	}
 }
 
