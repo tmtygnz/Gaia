@@ -3,9 +3,9 @@ package defect_type_features
 import (
 	"github.com/go-jet/jet/v2/postgres"
 	"log"
-	"mckenzie/internal/entities"
-	"mckenzie/internal/jet/postgres/public/table"
-	"mckenzie/provider"
+	"mackenzie/internal/entities"
+	"mackenzie/internal/jet/postgres/public/table"
+	"mackenzie/provider"
 )
 
 type DefectTypeFeatureHandler struct {

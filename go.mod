@@ -1,4 +1,4 @@
-module mckenzie
+module mackenzie
 
 go 1.22
 
