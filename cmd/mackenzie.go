@@ -5,6 +5,7 @@ import (
 	_ "github.com/lib/pq"
 	"log"
 	defect_features "mackenzie/internal/features/defect_features"
+	"mackenzie/internal/features/defect_type_features"
 	product_features "mackenzie/internal/features/product_features"
 	inline_rejection "mackenzie/internal/inline-rejection"
 	"mackenzie/provider"
@@ -26,6 +27,7 @@ func main() {
 	databaseInstance := provider.NewDatabase()
 	defectFeatureHandler := defect_features.NewDefectFeatureHandler(databaseInstance)
 	productFeatureHandler := product_features.NewProductFeatureHandler(databaseInstance)
+	defectTypeFeatureHandler := defect_type_features.NewDefectTypeFeatureHandler(databaseInstance)
 
-	inline_rejection.IRRestInterface(defectFeatureHandler, productFeatureHandler)
+	inline_rejection.IRRestInterface(defectFeatureHandler, productFeatureHandler, defectTypeFeatureHandler)
 }
