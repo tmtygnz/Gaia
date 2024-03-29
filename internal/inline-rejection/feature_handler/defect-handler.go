@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"mackenzie/internal/entities"
-	defect_features "mackenzie/internal/features/defect-features"
+	defect_features "mackenzie/internal/features/defect_features"
 	"net/http"
 	"strconv"
 )

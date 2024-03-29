@@ -4,8 +4,8 @@ import (
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	"log"
-	defect_features "mackenzie/internal/features/defect-features"
-	product_features "mackenzie/internal/features/product-features"
+	defect_features "mackenzie/internal/features/defect_features"
+	product_features "mackenzie/internal/features/product_features"
 	inline_rejection "mackenzie/internal/inline-rejection"
 	"mackenzie/provider"
 )
