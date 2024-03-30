@@ -17,6 +17,6 @@ func IRRestInterface(defectFeature *defect_features.DefectFeatureHandler, produc
 
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
-		log.Panicln("Server didn't start", err)
+		log.Panic("Server didn't start", err)
 	}
 }

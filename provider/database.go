@@ -45,7 +45,7 @@ database.Query(stmt, tfo)
 func (prov *DBProvider) Query(query postgres.SelectStatement, tfo interface{}) error {
 	err := query.Query(prov.database, tfo)
 	if err != nil {
-		log.Panicln("Query error", err)
+		log.Println("Query error", err)
 		return err
 	}
 	return nil
@@ -58,7 +58,7 @@ Use these for functions that doesn't return rows
 func (prov *DBProvider) Exec(query postgres.Statement, tfo interface{}) error {
 	_, err := query.Exec(prov.database)
 	if err != nil {
-		log.Panicln("Exec error", err)
+		log.Println("Exec error", err)
 		return err
 	}
 	return nil

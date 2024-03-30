@@ -20,7 +20,7 @@ func (handler *DefectFeatureHandler) FetchAllDefects() *[]entities.DDefects {
 	var tfo = new([]entities.DDefects)
 	stmt := table.Defects.SELECT(table.Defects.AllColumns).FROM(table.Defects)
 	if err := handler.db.Query(stmt, tfo); err != nil {
-		log.Panicln("An error occurred when fetching all defects from the database", err)
+		log.Println("An error occurred when fetching all defects from the database", err)
 		return nil
 	}
 	return tfo
@@ -31,7 +31,7 @@ func (handler *DefectFeatureHandler) FetchDefectById(id int64) *entities.DDefect
 	stmt := table.Defects.SELECT(table.Defects.AllColumns).FROM(table.Defects).
 		WHERE(table.Defects.ID.EQ(postgres.Int64(id)))
 	if err := handler.db.Query(stmt, tfo); err != nil {
-		log.Panicln("An error occurred while fetching defect by id", err)
+		log.Println("An error occurred while fetching defect by id", err)
 		return nil
 	}
 	return tfo

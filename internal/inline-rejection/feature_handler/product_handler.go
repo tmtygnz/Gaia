@@ -23,7 +23,7 @@ func NewProductRestHandler(productFeatHandler *product_features.ProductFeatureHa
 		productFeatureHandler: productFeatHandler,
 	}
 	http.HandleFunc("/product", handler.FetchAllProductHandler)
-	http.HandleFunc("/product/by/{id}", handler.FetchProductByIdHandler)
+	http.HandleFunc("/product/by/", handler.FetchProductByIdHandler)
 }
 
 func (restHandler *ProductRestHandler) FetchAllProductHandler(writer http.ResponseWriter, request *http.Request) {
@@ -37,9 +37,7 @@ func (restHandler *ProductRestHandler) FetchAllProductHandler(writer http.Respon
 			writer.WriteHeader(http.StatusInternalServerError)
 		}
 
-		if _, err = writer.Write(allProductsBytes); err != nil {
-			log.Panicln()
-		}
+		writer.Write(allProductsBytes)
 	}
 }
 
