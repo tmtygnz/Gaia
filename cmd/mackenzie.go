@@ -6,6 +6,7 @@ import (
 	"log"
 	defect_features "mackenzie/internal/features/defect_features"
 	"mackenzie/internal/features/defect_type_features"
+	"mackenzie/internal/features/packaging_features"
 	product_features "mackenzie/internal/features/product_features"
 	inline_rejection "mackenzie/internal/inline-rejection"
 	"mackenzie/provider"
@@ -28,6 +29,7 @@ func main() {
 	defectFeatureHandler := defect_features.NewDefectFeatureHandler(databaseInstance)
 	productFeatureHandler := product_features.NewProductFeatureHandler(databaseInstance)
 	defectTypeFeatureHandler := defect_type_features.NewDefectTypeFeatureHandler(databaseInstance)
+	packagingQueryFeatureHandler := packaging_features.NewPackagingTypeQueriesHandler(databaseInstance)
 
-	inline_rejection.IRRestInterface(defectFeatureHandler, productFeatureHandler, defectTypeFeatureHandler)
+	inline_rejection.IRRestInterface(defectFeatureHandler, productFeatureHandler, defectTypeFeatureHandler, packagingQueryFeatureHandler)
 }

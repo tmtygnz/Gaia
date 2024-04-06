@@ -22,3 +22,14 @@ func GetRequestQuery(writer http.ResponseWriter, request *http.Request, key stri
 
 	return &queryStr
 }
+
+/*
+Send sends the given bytes to the client with the corresponding content type
+*/
+func Send(writer http.ResponseWriter, data *[]byte, contentType string) {
+	writer.Header().Set("Content-Type", contentType)
+	_, err := writer.Write(*data)
+	if err != nil {
+		log.Println("Failed to send packaging")
+	}
+}
