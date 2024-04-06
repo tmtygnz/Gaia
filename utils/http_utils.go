@@ -30,6 +30,6 @@ func Send(writer http.ResponseWriter, data *[]byte, contentType string) {
 	writer.Header().Set("Content-Type", contentType)
 	_, err := writer.Write(*data)
 	if err != nil {
-		log.Println("Failed to send packaging")
+		log.Println("Failed to send data")
 	}
 }
