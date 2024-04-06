@@ -2,9 +2,9 @@ package feature_handler
 
 import (
 	"encoding/json"
+	"gaia/internal/entities"
+	defect_features "gaia/internal/features/defect_features"
 	"log"
-	"mackenzie/internal/entities"
-	defect_features "mackenzie/internal/features/defect_features"
 	"net/http"
 	"strconv"
 )

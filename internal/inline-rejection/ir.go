@@ -1,12 +1,12 @@
 package inline_rejection
 
 import (
+	"gaia/internal/features/defect_features"
+	"gaia/internal/features/defect_type_features"
+	"gaia/internal/features/packaging_features"
+	"gaia/internal/features/product_features"
+	"gaia/internal/inline-rejection/feature_handler"
 	"log"
-	"mackenzie/internal/features/defect_features"
-	"mackenzie/internal/features/defect_type_features"
-	"mackenzie/internal/features/packaging_features"
-	"mackenzie/internal/features/product_features"
-	"mackenzie/internal/inline-rejection/feature_handler"
 	"net/http"
 )
 

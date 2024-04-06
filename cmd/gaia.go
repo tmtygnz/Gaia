@@ -1,15 +1,15 @@
 package main
 
 import (
+	defect_features "gaia/internal/features/defect_features"
+	"gaia/internal/features/defect_type_features"
+	"gaia/internal/features/packaging_features"
+	product_features "gaia/internal/features/product_features"
+	inline_rejection "gaia/internal/inline-rejection"
+	"gaia/provider"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	"log"
-	defect_features "mackenzie/internal/features/defect_features"
-	"mackenzie/internal/features/defect_type_features"
-	"mackenzie/internal/features/packaging_features"
-	product_features "mackenzie/internal/features/product_features"
-	inline_rejection "mackenzie/internal/inline-rejection"
-	"mackenzie/provider"
 )
 
 /*

@@ -1,11 +1,11 @@
 package product_features
 
 import (
+	"gaia/internal/entities"
+	"gaia/internal/jet/postgres/public/table"
+	"gaia/provider"
 	"github.com/go-jet/jet/v2/postgres"
 	"log"
-	"mackenzie/internal/entities"
-	"mackenzie/internal/jet/postgres/public/table"
-	"mackenzie/provider"
 )
 
 type ProductFeatureHandler struct {
