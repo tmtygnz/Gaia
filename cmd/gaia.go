@@ -1,7 +1,6 @@
 package main
 
 import (
-	"gaia/internal/features/area_features"
 	defect_features "gaia/internal/features/defect_features"
 	"gaia/internal/features/defect_type_features"
 	"gaia/internal/features/packaging_features"
@@ -31,8 +30,6 @@ func main() {
 	productFeatureHandler := product_features.NewProductFeatureHandler(databaseInstance)
 	defectTypeFeatureHandler := defect_type_features.NewDefectTypeFeatureHandler(databaseInstance)
 	packagingQueryFeatureHandler := packaging_features.NewPackagingTypeQueriesHandler(databaseInstance)
-	areaQueryFeatureHandler := area_features.NewAreaFeatureHandler(databaseInstance)
 
-	inline_rejection.IRRestInterface(defectFeatureHandler, productFeatureHandler, defectTypeFeatureHandler,
-		packagingQueryFeatureHandler, areaQueryFeatureHandler)
+	inline_rejection.IRRestInterface(defectFeatureHandler, productFeatureHandler, defectTypeFeatureHandler, packagingQueryFeatureHandler)
 }
