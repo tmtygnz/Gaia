@@ -37,6 +37,9 @@ func (restHandler *DefectRestHandler) FetchDefectByIdHandler(writer http.Respons
 	switch request.Method {
 	case http.MethodGet:
 		idStr := utils.GetRequestQuery(writer, request, "id")
+		if idStr == nil {
+			return
+		}
 
 		id, err := strconv.Atoi(*idStr)
 		if err != nil {

@@ -38,6 +38,9 @@ func (restHandler *ProductRestHandler) FetchProductByIdHandler(writer http.Respo
 	switch request.Method {
 	case http.MethodGet:
 		idStr := utils.GetRequestQuery(writer, request, "id")
+		if idStr == nil {
+			return
+		}
 
 		id, err := strconv.Atoi(*idStr)
 		if err != nil {
