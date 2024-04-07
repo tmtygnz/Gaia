@@ -5,7 +5,6 @@ import (
 	"gaia/internal/entities"
 	"gaia/internal/features/defect_type_features"
 	"gaia/utils"
-	"log"
 	"net/http"
 	"strconv"
 )
@@ -34,12 +33,11 @@ func (restHandler *DefectTypeRestHandler) FetchAllDefectTypeHandler(writer http.
 
 		allDefectTypeBytes, err := json.Marshal(allDefectType)
 		if err != nil {
-			log.Println("Something went wrong when marshaling all defect types", err)
-			writer.WriteHeader(http.StatusInternalServerError)
+			http.Error(writer, "Server is unable to marshal defect types to bytes", http.StatusInternalServerError)
+			return
 		}
-		if _, err := writer.Write(allDefectTypeBytes); err != nil {
-			log.Println("Failed writing all defect type bytes to http writer", err)
-		}
+
+		utils.Send(writer, &allDefectTypeBytes, "application/json")
 	}
 }
 
@@ -50,16 +48,16 @@ func (restHandler *DefectTypeRestHandler) FetchDefectTypeByIdHandler(writer http
 
 		id, err := strconv.Atoi(*idStr)
 		if err != nil {
-			writer.WriteHeader(http.StatusInternalServerError)
+			http.Error(writer, "Invalid id type", http.StatusBadRequest)
+			return
 		}
 		defectType := restHandler.defectFeatureHandler.FetchDefectTypeById(int64(id))
 
 		defectTypeBytes, err := json.Marshal(defectType)
 		if err != nil {
-			log.Println("Can't marshal defectType")
-			writer.WriteHeader(http.StatusInternalServerError)
+			http.Error(writer, "Server is unable to marshal defect type to bytes", http.StatusInternalServerError)
 		}
 
-		writer.Write(defectTypeBytes)
+		utils.Send(writer, &defectTypeBytes, "application/json")
 	}
 }

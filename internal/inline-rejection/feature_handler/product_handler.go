@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"gaia/internal/entities"
 	"gaia/internal/features/product_features"
-	"log"
+	"gaia/utils"
 	"net/http"
 	"strconv"
 )
@@ -33,35 +33,32 @@ func (restHandler *ProductRestHandler) FetchAllProductHandler(writer http.Respon
 
 		allProductsBytes, err := json.Marshal(allProducts)
 		if err != nil {
-			log.Println("Error marshaling all products", err)
-			writer.WriteHeader(http.StatusInternalServerError)
+			http.Error(writer, "Server is unable to marshal product to bytes", http.StatusInternalServerError)
+			return
 		}
 
-		writer.Write(allProductsBytes)
+		utils.Send(writer, &allProductsBytes, "application/json")
 	}
 }
 
 func (restHandler *ProductRestHandler) FetchProductByIdHandler(writer http.ResponseWriter, request *http.Request) {
 	switch request.Method {
 	case http.MethodGet:
-		idStr := request.URL.Query().Get("id")
-		if idStr == "" {
-			writer.WriteHeader(http.StatusUnprocessableEntity)
-			writer.Write([]byte("Id parameter is missing"))
-		}
+		idStr := utils.GetRequestQuery(writer, request, "id")
 
-		id, err := strconv.Atoi(idStr)
+		id, err := strconv.Atoi(*idStr)
 		if err != nil {
-			writer.WriteHeader(http.StatusInternalServerError)
+			http.Error(writer, "Invalid id type", http.StatusBadRequest)
+			return
 		}
 		product := restHandler.productFeatureHandler.FetchProductById(int64(id))
 
 		productBytes, err := json.Marshal(product)
 		if err != nil {
-			log.Println("Can't marshal product", err)
-			writer.WriteHeader(http.StatusInternalServerError)
+			http.Error(writer, "Server is unable to marshal product to bytes", http.StatusInternalServerError)
+			return
 		}
 
-		writer.Write(productBytes)
+		utils.Send(writer, &productBytes, "application/json")
 	}
 }
