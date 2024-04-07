@@ -38,7 +38,7 @@ func (restHandler *DefectRestHandler) FetchDefectByIdHandler(writer http.Respons
 	case http.MethodGet:
 		idStr := utils.GetRequestQuery(writer, request, "id")
 
-		id, err := strconv.Atoi(idStr)
+		id, err := strconv.Atoi(*idStr)
 		if err != nil {
 			http.Error(writer, "Invalid id type", http.StatusInternalServerError)
 		}
