@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -24,9 +25,16 @@ func GetRequestQuery(writer http.ResponseWriter, request *http.Request, key stri
 /*
 Send sends the given bytes to the client with the corresponding content type
 */
-func Send(writer http.ResponseWriter, data *[]byte, contentType string) {
+func Send(writer http.ResponseWriter, data interface{}, contentType string) {
+	dataBytes, err := json.Marshal(data)
+	if err != nil {
+		http.Error(writer, "Server unable to marshal data to bytes", http.StatusInternalServerError)
+		return
+	}
+
 	writer.Header().Set("Content-Type", contentType)
-	_, err := writer.Write(*data)
+
+	_, err = writer.Write(dataBytes)
 	if err != nil {
 		log.Println("Failed to send data")
 	}
