@@ -4,6 +4,7 @@ import (
 	"gaia/internal/entities"
 	"gaia/internal/features/product_features"
 	"gaia/utils"
+	"log"
 	"net/http"
 	"strconv"
 )
@@ -23,6 +24,8 @@ func NewProductRestHandler(productFeatHandler *product_features.ProductFeatureHa
 	}
 	http.HandleFunc("/product", handler.FetchAllProductHandler)
 	http.HandleFunc("/product/by/", handler.FetchProductByIdHandler)
+
+	log.Println("Product rest handler created")
 }
 
 func (restHandler *ProductRestHandler) FetchAllProductHandler(writer http.ResponseWriter, request *http.Request) {

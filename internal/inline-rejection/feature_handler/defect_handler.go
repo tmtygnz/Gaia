@@ -4,6 +4,7 @@ import (
 	"gaia/internal/entities"
 	defect_features "gaia/internal/features/defect_features"
 	"gaia/utils"
+	"log"
 	"net/http"
 	"strconv"
 )
@@ -23,6 +24,8 @@ func NewDefectRestHandler(defectFeatHandler *defect_features.DefectFeatureHandle
 	}
 	http.HandleFunc("/defect", handler.FetchAllDefectHandler)
 	http.HandleFunc("/defect/by/{id}", handler.FetchDefectByIdHandler)
+
+	log.Println("Defect rest handler created")
 }
 
 func (restHandler *DefectRestHandler) FetchAllDefectHandler(writer http.ResponseWriter, request *http.Request) {

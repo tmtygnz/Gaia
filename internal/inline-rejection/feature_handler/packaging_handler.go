@@ -4,6 +4,7 @@ import (
 	"gaia/internal/entities"
 	"gaia/internal/features/packaging_features"
 	"gaia/utils"
+	"log"
 	"net/http"
 	"strconv"
 )
@@ -23,6 +24,8 @@ func NewPackagingRestHandler(packagingQueryHandler *packaging_features.Packaging
 	}
 	http.HandleFunc("/packaging", handler.FetchAllPackagingHandler)
 	http.HandleFunc("/packaging/by/", handler.FetchPackagingByIdHandler)
+
+	log.Println("Packaging rest handler created")
 }
 
 func (restHandler *PackagingRestHandler) FetchAllPackagingHandler(writer http.ResponseWriter, request *http.Request) {
