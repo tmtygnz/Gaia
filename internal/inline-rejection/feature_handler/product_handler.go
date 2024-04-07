@@ -1,7 +1,6 @@
 package feature_handler
 
 import (
-	"encoding/json"
 	"gaia/internal/entities"
 	"gaia/internal/features/product_features"
 	"gaia/utils"
@@ -31,13 +30,7 @@ func (restHandler *ProductRestHandler) FetchAllProductHandler(writer http.Respon
 	case http.MethodGet:
 		allProducts := restHandler.productFeatureHandler.FetchAllProducts()
 
-		allProductsBytes, err := json.Marshal(allProducts)
-		if err != nil {
-			http.Error(writer, "Server is unable to marshal product to bytes", http.StatusInternalServerError)
-			return
-		}
-
-		utils.Send(writer, &allProductsBytes, "application/json")
+		utils.Send(writer, &allProducts, "application/json")
 	}
 }
 
@@ -53,12 +46,6 @@ func (restHandler *ProductRestHandler) FetchProductByIdHandler(writer http.Respo
 		}
 		product := restHandler.productFeatureHandler.FetchProductById(int64(id))
 
-		productBytes, err := json.Marshal(product)
-		if err != nil {
-			http.Error(writer, "Server is unable to marshal product to bytes", http.StatusInternalServerError)
-			return
-		}
-
-		utils.Send(writer, &productBytes, "application/json")
+		utils.Send(writer, &product, "application/json")
 	}
 }

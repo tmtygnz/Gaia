@@ -1,11 +1,9 @@
 package feature_handler
 
 import (
-	"encoding/json"
 	"gaia/internal/entities"
 	"gaia/internal/features/packaging_features"
 	"gaia/utils"
-	"log"
 	"net/http"
 	"strconv"
 )
@@ -32,13 +30,7 @@ func (restHandler *PackagingRestHandler) FetchAllPackagingHandler(writer http.Re
 	case http.MethodGet:
 		allProducts := restHandler.packagingQueryHandler.FetchAllPackaging()
 
-		allPackagingBytes, err := json.Marshal(allProducts)
-		if err != nil {
-			http.Error(writer, "Server is unable to marshal packaging to bytes", http.StatusInternalServerError)
-			return
-		}
-
-		utils.Send(writer, &allPackagingBytes, "application/json")
+		utils.Send(writer, &allProducts, "application/json")
 	}
 }
 
@@ -54,13 +46,6 @@ func (restHandler *PackagingRestHandler) FetchPackagingByIdHandler(writer http.R
 		}
 		packaging := restHandler.packagingQueryHandler.FetchPackagingById(int64(id))
 
-		packagingBytes, err := json.Marshal(packaging)
-		if err != nil {
-			log.Println("Can't marshal packaging to bytes", err)
-			http.Error(writer, "Server is unable to marshal packaging to bytes", http.StatusInternalServerError)
-			return
-		}
-
-		utils.Send(writer, &packagingBytes, "application/json")
+		utils.Send(writer, &packaging, "application/json")
 	}
 }

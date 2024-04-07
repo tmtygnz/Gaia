@@ -1,7 +1,6 @@
 package feature_handler
 
 import (
-	"encoding/json"
 	"gaia/internal/entities"
 	"gaia/internal/features/defect_type_features"
 	"gaia/utils"
@@ -31,13 +30,7 @@ func (restHandler *DefectTypeRestHandler) FetchAllDefectTypeHandler(writer http.
 	case http.MethodGet:
 		allDefectType := restHandler.defectFeatureHandler.FetchAllDefectType()
 
-		allDefectTypeBytes, err := json.Marshal(allDefectType)
-		if err != nil {
-			http.Error(writer, "Server is unable to marshal defect types to bytes", http.StatusInternalServerError)
-			return
-		}
-
-		utils.Send(writer, &allDefectTypeBytes, "application/json")
+		utils.Send(writer, &allDefectType, "application/json")
 	}
 }
 
@@ -53,11 +46,6 @@ func (restHandler *DefectTypeRestHandler) FetchDefectTypeByIdHandler(writer http
 		}
 		defectType := restHandler.defectFeatureHandler.FetchDefectTypeById(int64(id))
 
-		defectTypeBytes, err := json.Marshal(defectType)
-		if err != nil {
-			http.Error(writer, "Server is unable to marshal defect type to bytes", http.StatusInternalServerError)
-		}
-
-		utils.Send(writer, &defectTypeBytes, "application/json")
+		utils.Send(writer, &defectType, "application/json")
 	}
 }

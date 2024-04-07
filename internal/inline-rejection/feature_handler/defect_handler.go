@@ -1,10 +1,9 @@
 package feature_handler
 
 import (
-	"encoding/json"
 	"gaia/internal/entities"
 	defect_features "gaia/internal/features/defect_features"
-	"log"
+	"gaia/utils"
 	"net/http"
 	"strconv"
 )
@@ -30,36 +29,21 @@ func (restHandler *DefectRestHandler) FetchAllDefectHandler(writer http.Response
 	if request.Method == http.MethodGet {
 		allDefects := restHandler.defectFeatureHandler.FetchAllDefects()
 
-		allDefectsBytes, err := json.Marshal(allDefects)
-		if err != nil {
-			log.Println("Error marshaling all defects", err)
-			writer.WriteHeader(http.StatusInternalServerError)
-		}
-		writer.Write(allDefectsBytes)
+		utils.Send(writer, &allDefects, "application/json")
 	}
 }
 
 func (restHandler *DefectRestHandler) FetchDefectByIdHandler(writer http.ResponseWriter, request *http.Request) {
 	switch request.Method {
 	case http.MethodGet:
-		idStr := request.URL.Query().Get("id")
-		if idStr == "" {
-			writer.WriteHeader(http.StatusUnprocessableEntity)
-			writer.Write([]byte("Missing id parameter"))
-		}
+		idStr := utils.GetRequestQuery(writer, request, "id")
 
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
-			writer.WriteHeader(http.StatusInternalServerError)
+			http.Error(writer, "Invalid id type", http.StatusInternalServerError)
 		}
 		defect := restHandler.defectFeatureHandler.FetchDefectById(int64(id))
 
-		defectBytes, err := json.Marshal(defect)
-		if err != nil {
-			log.Println("Error marshaling defect", err)
-			writer.WriteHeader(http.StatusInternalServerError)
-		}
-
-		writer.Write(defectBytes)
+		utils.Send(writer, &defect, "application/json")
 	}
 }
