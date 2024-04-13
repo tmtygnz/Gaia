@@ -15,10 +15,10 @@ type DefectFeature interface {
 }
 
 type DefectRestHandler struct {
-	defectFeatureHandler *defect_features.DefectFeatureHandler
+	defectFeatureHandler *defect_features.DefectQueryFeatureHandler
 }
 
-func NewDefectRestHandler(defectFeatHandler *defect_features.DefectFeatureHandler) {
+func NewDefectRestHandler(defectFeatHandler *defect_features.DefectQueryFeatureHandler) {
 	handler := &DefectRestHandler{
 		defectFeatureHandler: defectFeatHandler,
 	}

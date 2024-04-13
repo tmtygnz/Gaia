@@ -11,7 +11,7 @@ import (
 	"net/http"
 )
 
-func IRRestInterface(defectFeature *defect_features.DefectFeatureHandler,
+func IRRestInterface(defectFeature *defect_features.DefectQueryFeatureHandler,
 	productFeature *product_features.ProductFeatureHandler,
 	defectTypeFeature *defect_type_features.DefectTypeFeatureHandler,
 	packagingQueryFeature *packaging_features.PackagingQueryHandler,

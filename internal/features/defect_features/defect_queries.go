@@ -8,15 +8,15 @@ import (
 	"log"
 )
 
-type DefectFeatureHandler struct {
+type DefectQueryFeatureHandler struct {
 	db provider.IDBProvider
 }
 
-func NewDefectFeatureHandler(db provider.IDBProvider) *DefectFeatureHandler {
-	return &DefectFeatureHandler{db: db}
+func NewDefectQueryFeatureHandler(db provider.IDBProvider) *DefectQueryFeatureHandler {
+	return &DefectQueryFeatureHandler{db: db}
 }
 
-func (handler *DefectFeatureHandler) FetchAllDefects() *[]entities.DDefects {
+func (handler *DefectQueryFeatureHandler) FetchAllDefects() *[]entities.DDefects {
 	var tfo = new([]entities.DDefects)
 	stmt := table.Defects.SELECT(table.Defects.AllColumns).FROM(table.Defects)
 	if err := handler.db.Query(stmt, tfo); err != nil {
@@ -26,7 +26,7 @@ func (handler *DefectFeatureHandler) FetchAllDefects() *[]entities.DDefects {
 	return tfo
 }
 
-func (handler *DefectFeatureHandler) FetchDefectById(id int64) *entities.DDefects {
+func (handler *DefectQueryFeatureHandler) FetchDefectById(id int64) *entities.DDefects {
 	var tfo = new(entities.DDefects)
 	stmt := table.Defects.SELECT(table.Defects.AllColumns).FROM(table.Defects).
 		WHERE(table.Defects.ID.EQ(postgres.Int64(id)))
@@ -37,7 +37,7 @@ func (handler *DefectFeatureHandler) FetchDefectById(id int64) *entities.DDefect
 	return tfo
 }
 
-func (handler *DefectFeatureHandler) FullTextSearchDefects(query string) *[]entities.DDefects {
+func (handler *DefectQueryFeatureHandler) FullTextSearchDefects(query string) *[]entities.DDefects {
 	var tfo = new([]entities.DDefects)
 	stmt := table.Defects.SELECT(table.Defects.AllColumns).FROM(table.Defects).WHERE(table.Defects.DefectDescription.EQ(postgres.String(query)))
 	if err := handler.db.Query(stmt, tfo); err != nil {
