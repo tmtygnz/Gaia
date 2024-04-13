@@ -3,6 +3,7 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 )
@@ -38,4 +39,21 @@ func Send(writer http.ResponseWriter, data interface{}, contentType string) {
 	if err != nil {
 		log.Println("Failed to send data")
 	}
+}
+
+func ReadBody(writer http.ResponseWriter, request *http.Request, tfo interface{}) error {
+	body, err := io.ReadAll(request.Body)
+	if err != nil {
+		log.Println(err.Error())
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		return err
+	}
+
+	err = json.Unmarshal(body, &tfo)
+	if err != nil {
+		log.Println(err.Error())
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		return err
+	}
+	return nil
 }
