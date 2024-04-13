@@ -9,7 +9,7 @@ import (
 
 type IDBProvider interface {
 	Query(query postgres.SelectStatement, tfo interface{}) error
-	Exec(query postgres.Statement, tfo interface{}) error
+	Exec(query postgres.Statement) error
 }
 
 type DBProvider struct {
@@ -55,7 +55,7 @@ func (prov *DBProvider) Query(query postgres.SelectStatement, tfo interface{}) e
 Exec executes the given statement.
 Use these for functions that doesn't return rows
 */
-func (prov *DBProvider) Exec(query postgres.Statement, tfo interface{}) error {
+func (prov *DBProvider) Exec(query postgres.Statement) error {
 	_, err := query.Exec(prov.database)
 	if err != nil {
 		log.Println("Exec error", err)
