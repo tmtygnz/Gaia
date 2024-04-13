@@ -31,9 +31,11 @@ func NewProductRestHandler(productFeatHandler *product_features.ProductFeatureHa
 func (restHandler *ProductRestHandler) FetchAllProductHandler(writer http.ResponseWriter, request *http.Request) {
 	switch request.Method {
 	case http.MethodGet:
-		allProducts := restHandler.productFeatureHandler.FetchAllProducts()
-
-		utils.Send(writer, &allProducts, "application/json")
+		products, err := restHandler.productFeatureHandler.FetchAllProducts()
+		if err != nil {
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+		}
+		utils.Send(writer, &products, "application/json")
 	}
 }
 
@@ -50,7 +52,11 @@ func (restHandler *ProductRestHandler) FetchProductByIdHandler(writer http.Respo
 			http.Error(writer, "Invalid id type", http.StatusBadRequest)
 			return
 		}
-		product := restHandler.productFeatureHandler.FetchProductById(int64(id))
+
+		product, err := restHandler.productFeatureHandler.FetchProductById(int64(id))
+		if err != nil {
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+		}
 
 		utils.Send(writer, &product, "application/json")
 	}

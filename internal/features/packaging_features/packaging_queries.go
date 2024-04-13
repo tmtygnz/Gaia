@@ -16,23 +16,23 @@ func NewPackagingTypeQueriesHandler(db *provider.DBProvider) *PackagingQueryHand
 	return &PackagingQueryHandler{db: db}
 }
 
-func (handler *PackagingQueryHandler) FetchAllPackaging() *[]entities.DPackaging {
+func (handler *PackagingQueryHandler) FetchAllPackaging() (*[]entities.DPackaging, error) {
 	var tfo = new([]entities.DPackaging)
 	stmt := table.PackagingType.SELECT(table.PackagingType.AllColumns).FROM(table.PackagingType)
 	if err := handler.db.Query(stmt, tfo); err != nil {
 		log.Println("An error occured whe fetching data")
-		return nil
+		return nil, err
 	}
-	return tfo
+	return tfo, nil
 }
 
-func (handler *PackagingQueryHandler) FetchPackagingById(id int64) *entities.DPackaging {
+func (handler *PackagingQueryHandler) FetchPackagingById(id int64) (*entities.DPackaging, error) {
 	var tfo = new(entities.DPackaging)
 	stmt := table.PackagingType.SELECT(table.PackagingType.AllColumns).FROM(table.PackagingType).
 		WHERE(table.PackagingType.ID.EQ(postgres.Int64(id)))
 	if err := handler.db.Query(stmt, tfo); err != nil {
 		log.Println("An error occured when fetching defect type by id", err)
-		return nil
+		return nil, err
 	}
-	return tfo
+	return tfo, nil
 }

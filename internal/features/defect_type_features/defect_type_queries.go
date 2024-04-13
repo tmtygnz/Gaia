@@ -19,26 +19,26 @@ func NewDefectTypeFeatureHandler(db provider.IDBProvider) *DefectTypeFeatureHand
 /*
 FetchAllProducts fetches all products in the database
 */
-func (handler *DefectTypeFeatureHandler) FetchAllDefectType() *[]entities.DDefectType {
+func (handler *DefectTypeFeatureHandler) FetchAllDefectType() (*[]entities.DDefectType, error) {
 	var tfo = new([]entities.DDefectType)
 	stmt := table.DefectsType.SELECT(table.DefectsType.AllColumns).FROM(table.DefectsType)
 	if err := handler.db.Query(stmt, tfo); err != nil {
 		log.Println("An error occurred when fetching all defect types", err)
-		return nil
+		return nil, err
 	}
-	return tfo
+	return tfo, nil
 }
 
 /*
 FetchAllProducts fetches all products in the database
 */
-func (handler *DefectTypeFeatureHandler) FetchDefectTypeById(id int64) *entities.DDefectType {
+func (handler *DefectTypeFeatureHandler) FetchDefectTypeById(id int64) (*entities.DDefectType, error) {
 	var tfo = new(entities.DDefectType)
 	stmt := table.DefectsType.SELECT(table.DefectsType.AllColumns).FROM(table.DefectsType).
 		WHERE(table.DefectsType.ID.EQ(postgres.Int64(id)))
 	if err := handler.db.Query(stmt, tfo); err != nil {
 		log.Println("An error occurred when fetching defect type by id", err)
-		return nil
+		return nil, err
 	}
-	return tfo
+	return tfo, nil
 }

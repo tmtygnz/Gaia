@@ -10,8 +10,8 @@ import (
 )
 
 type AreaQueries interface {
-	FetchAllAreas() *[]entities.DArea
-	FetchAreaById(id int64) *entities.DArea
+	FetchAllAreas() (*[]entities.DArea, error)
+	FetchAreaById(id int64) (*entities.DArea, error)
 }
 
 type AreaRestHandler struct {
@@ -31,7 +31,10 @@ func NewAreaRestHandler(areaQueryHandler *area_features.AreaQueryHandler) {
 func (restHandler *AreaRestHandler) FetchAllAreaHandler(writer http.ResponseWriter, request *http.Request) {
 	switch request.Method {
 	case http.MethodGet:
-		areas := restHandler.areaQueries.FetchAllAreas()
+		areas, err := restHandler.areaQueries.FetchAllAreas()
+		if err != nil {
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+		}
 
 		utils.Send(writer, &areas, "application/json")
 	}
@@ -50,7 +53,11 @@ func (restHandler *AreaRestHandler) FetchAreaByIdHandler(writer http.ResponseWri
 			http.Error(writer, "Invalid id type", http.StatusBadRequest)
 			return
 		}
-		area := restHandler.areaQueries.FetchAreaById(int64(id))
+
+		area, err := restHandler.areaQueries.FetchAreaById(int64(id))
+		if err != nil {
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+		}
 
 		utils.Send(writer, &area, "application/json")
 	}

@@ -16,23 +16,23 @@ func NewAreaFeatureHandler(db provider.IDBProvider) *AreaQueryHandler {
 	return &AreaQueryHandler{db: db}
 }
 
-func (handler *AreaQueryHandler) FetchAllAreas() *[]entities.DArea {
+func (handler *AreaQueryHandler) FetchAllAreas() (*[]entities.DArea, error) {
 	var tfo = new([]entities.DArea)
 	stmt := table.Places.SELECT(table.Places.AllColumns).FROM(table.Places)
 	if err := handler.db.Query(stmt, tfo); err != nil {
 		log.Println("An error occurred when fetching all areas from the database", err)
-		return nil
+		return nil, err
 	}
-	return tfo
+	return tfo, nil
 }
 
-func (handler *AreaQueryHandler) FetchAreaById(id int64) *entities.DArea {
+func (handler *AreaQueryHandler) FetchAreaById(id int64) (*entities.DArea, error) {
 	var tfo = new(entities.DArea)
 	stmt := table.Places.SELECT(table.Places.AllColumns).FROM(table.Places).
 		WHERE(table.Places.ID.EQ(postgres.Int64(id)))
 	if err := handler.db.Query(stmt, tfo); err != nil {
 		log.Println("An error occurred while fetching area by id", err)
-		return nil
+		return nil, err
 	}
-	return tfo
+	return tfo, nil
 }

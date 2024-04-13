@@ -10,8 +10,8 @@ import (
 )
 
 type DefectTypeFeature interface {
-	FetchAllDefectType() *[]entities.DDefectType
-	FetchDefectTypeById(id int64) *entities.DDefectType
+	FetchAllDefectType() (*[]entities.DDefectType, error)
+	FetchDefectTypeById(id int64) (*entities.DDefectType, error)
 }
 
 type DefectTypeRestHandler struct {
@@ -31,8 +31,10 @@ func NewDefectTypeRestHandler(defectFeatureHandler *defect_type_features.DefectT
 func (restHandler *DefectTypeRestHandler) FetchAllDefectTypeHandler(writer http.ResponseWriter, request *http.Request) {
 	switch request.Method {
 	case http.MethodGet:
-		allDefectType := restHandler.defectFeatureHandler.FetchAllDefectType()
-
+		allDefectType, err := restHandler.defectFeatureHandler.FetchAllDefectType()
+		if err != nil {
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+		}
 		utils.Send(writer, &allDefectType, "application/json")
 	}
 }
@@ -50,7 +52,11 @@ func (restHandler *DefectTypeRestHandler) FetchDefectTypeByIdHandler(writer http
 			http.Error(writer, "Invalid id type", http.StatusBadRequest)
 			return
 		}
-		defectType := restHandler.defectFeatureHandler.FetchDefectTypeById(int64(id))
+
+		defectType, err := restHandler.defectFeatureHandler.FetchDefectTypeById(int64(id))
+		if err != nil {
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+		}
 
 		utils.Send(writer, &defectType, "application/json")
 	}

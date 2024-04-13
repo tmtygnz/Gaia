@@ -9,9 +9,10 @@ import (
 	"strconv"
 )
 
-type DefectFeature interface {
-	FetchAllDefects() *[]entities.DDefects
-	FetchDefectById(id int64) *entities.DDefects
+type DefectQueryFeature interface {
+	FetchAllDefects() (*[]entities.DDefects, error)
+	FetchDefectById(id int64) (*entities.DDefects, error)
+	FullTextSearchDefects(query string) (*[]entities.DDefects, error)
 }
 
 type DefectRestHandler struct {
@@ -31,7 +32,10 @@ func NewDefectRestHandler(defectFeatHandler *defect_features.DefectQueryFeatureH
 
 func (restHandler *DefectRestHandler) FetchAllDefectHandler(writer http.ResponseWriter, request *http.Request) {
 	if request.Method == http.MethodGet {
-		allDefects := restHandler.defectFeatureHandler.FetchAllDefects()
+		allDefects, err := restHandler.defectFeatureHandler.FetchAllDefects()
+		if err != nil {
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+		}
 
 		utils.Send(writer, &allDefects, "application/json")
 	}
@@ -49,7 +53,11 @@ func (restHandler *DefectRestHandler) FetchDefectByIdHandler(writer http.Respons
 		if err != nil {
 			http.Error(writer, "Invalid id type", http.StatusInternalServerError)
 		}
-		defect := restHandler.defectFeatureHandler.FetchDefectById(int64(id))
+
+		defect, err := restHandler.defectFeatureHandler.FetchDefectById(int64(id))
+		if err != nil {
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+		}
 
 		utils.Send(writer, &defect, "application/json")
 	}
@@ -63,7 +71,10 @@ func (restHandler *DefectRestHandler) FetchFullTextSearchDefectHandler(writer ht
 			return
 		}
 
-		defects := restHandler.defectFeatureHandler.FullTextSearchDefects(*queryStr)
+		defects, err := restHandler.defectFeatureHandler.FullTextSearchDefects(*queryStr)
+		if err != nil {
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+		}
 
 		utils.Send(writer, &defects, "application/json")
 	}

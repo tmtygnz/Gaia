@@ -31,9 +31,11 @@ func NewPackagingRestHandler(packagingQueryHandler *packaging_features.Packaging
 func (restHandler *PackagingRestHandler) FetchAllPackagingHandler(writer http.ResponseWriter, request *http.Request) {
 	switch request.Method {
 	case http.MethodGet:
-		allProducts := restHandler.packagingQueryHandler.FetchAllPackaging()
-
-		utils.Send(writer, &allProducts, "application/json")
+		packaging, err := restHandler.packagingQueryHandler.FetchAllPackaging()
+		if err != nil {
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+		}
+		utils.Send(writer, &packaging, "application/json")
 	}
 }
 
@@ -50,7 +52,11 @@ func (restHandler *PackagingRestHandler) FetchPackagingByIdHandler(writer http.R
 			http.Error(writer, "Invalid id type", http.StatusBadRequest)
 			return
 		}
-		packaging := restHandler.packagingQueryHandler.FetchPackagingById(int64(id))
+
+		packaging, err := restHandler.packagingQueryHandler.FetchPackagingById(int64(id))
+		if err != nil {
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+		}
 
 		utils.Send(writer, &packaging, "application/json")
 	}

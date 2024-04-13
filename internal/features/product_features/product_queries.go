@@ -19,26 +19,26 @@ func NewProductFeatureHandler(db provider.IDBProvider) *ProductFeatureHandler {
 /*
 FetchAllProducts fetches all products in the database
 */
-func (handler *ProductFeatureHandler) FetchAllProducts() *[]entities.DProduct {
+func (handler *ProductFeatureHandler) FetchAllProducts() (*[]entities.DProduct, error) {
 	var tfo = new([]entities.DProduct)
 	stmt := table.Products.SELECT(table.Products.AllColumns).FROM(table.Products)
 	if err := handler.db.Query(stmt, tfo); err != nil {
 		log.Println("An error occurred when fetching all products", err)
-		return nil
+		return nil, err
 	}
-	return tfo
+	return tfo, nil
 }
 
 /*
 FetchProductById fetches product with the same id as the parameter
 */
-func (handler *ProductFeatureHandler) FetchProductById(id int64) *entities.DProduct {
+func (handler *ProductFeatureHandler) FetchProductById(id int64) (*entities.DProduct, error) {
 	tfo := new(entities.DProduct)
 	stmt := table.Products.SELECT(table.Products.AllColumns).FROM(table.Products).
 		WHERE(table.Products.ID.EQ(postgres.Int64(id)))
 	if err := handler.db.Query(stmt, tfo); err != nil {
 		log.Println("An error occurred when fetching product by id", err)
-		return nil
+		return nil, err
 	}
-	return tfo
+	return tfo, nil
 }
