@@ -24,6 +24,7 @@ func NewDefectRestHandler(defectFeatHandler *defect_features.DefectFeatureHandle
 	}
 	http.HandleFunc("/defect", handler.FetchAllDefectHandler)
 	http.HandleFunc("/defect/by/{id}", handler.FetchDefectByIdHandler)
+	http.HandleFunc("/defect/search", handler.FetchFullTextSearchDefectHandler)
 
 	log.Println("Defect rest handler created")
 }
@@ -51,5 +52,19 @@ func (restHandler *DefectRestHandler) FetchDefectByIdHandler(writer http.Respons
 		defect := restHandler.defectFeatureHandler.FetchDefectById(int64(id))
 
 		utils.Send(writer, &defect, "application/json")
+	}
+}
+
+func (restHandler *DefectRestHandler) FetchFullTextSearchDefectHandler(writer http.ResponseWriter, request *http.Request) {
+	switch request.Method {
+	case http.MethodGet:
+		queryStr := utils.GetRequestQuery(writer, request, "queryStr")
+		if queryStr == nil {
+			return
+		}
+
+		defects := restHandler.defectFeatureHandler.FullTextSearchDefects(*queryStr)
+
+		utils.Send(writer, &defects, "application/json")
 	}
 }
