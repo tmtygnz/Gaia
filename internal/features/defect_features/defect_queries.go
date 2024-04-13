@@ -12,7 +12,7 @@ type DefectQueryFeatureHandler struct {
 	db provider.IDBProvider
 }
 
-func NewDefectQueryFeatureHandler(db provider.IDBProvider) *DefectQueryFeatureHandler {
+func NewDefectQueryFeature(db provider.IDBProvider) *DefectQueryFeatureHandler {
 	return &DefectQueryFeatureHandler{db: db}
 }
 

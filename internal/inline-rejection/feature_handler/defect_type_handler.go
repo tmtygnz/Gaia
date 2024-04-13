@@ -9,17 +9,17 @@ import (
 	"strconv"
 )
 
-type DefectTypeFeature interface {
+type DefectTypeQueryFeature interface {
 	FetchAllDefectType() (*[]entities.DDefectType, error)
 	FetchDefectTypeById(id int64) (*entities.DDefectType, error)
 }
 
-type DefectTypeRestHandler struct {
-	defectFeatureHandler *defect_type_features.DefectTypeFeatureHandler
+type DefectTypeRestImpl struct {
+	defectFeatureHandler *defect_type_features.DefectTypeQueryFeatureImpl
 }
 
-func NewDefectTypeRestHandler(defectFeatureHandler *defect_type_features.DefectTypeFeatureHandler) {
-	handler := &DefectTypeRestHandler{
+func NewDefectTypeRestHandler(defectFeatureHandler *defect_type_features.DefectTypeQueryFeatureImpl) {
+	handler := &DefectTypeRestImpl{
 		defectFeatureHandler: defectFeatureHandler,
 	}
 	http.HandleFunc("/defectType", handler.FetchAllDefectTypeHandler)
@@ -28,7 +28,7 @@ func NewDefectTypeRestHandler(defectFeatureHandler *defect_type_features.DefectT
 	log.Println("Defect type rest handler created")
 }
 
-func (restHandler *DefectTypeRestHandler) FetchAllDefectTypeHandler(writer http.ResponseWriter, request *http.Request) {
+func (restHandler *DefectTypeRestImpl) FetchAllDefectTypeHandler(writer http.ResponseWriter, request *http.Request) {
 	switch request.Method {
 	case http.MethodGet:
 		allDefectType, err := restHandler.defectFeatureHandler.FetchAllDefectType()
@@ -39,7 +39,7 @@ func (restHandler *DefectTypeRestHandler) FetchAllDefectTypeHandler(writer http.
 	}
 }
 
-func (restHandler *DefectTypeRestHandler) FetchDefectTypeByIdHandler(writer http.ResponseWriter, request *http.Request) {
+func (restHandler *DefectTypeRestImpl) FetchDefectTypeByIdHandler(writer http.ResponseWriter, request *http.Request) {
 	switch request.Method {
 	case http.MethodGet:
 		idStr := utils.GetRequestQuery(writer, request, "id")

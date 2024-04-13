@@ -11,7 +11,7 @@ type DefectCommandFeatureHandler struct {
 	db provider.IDBProvider
 }
 
-func NewDefectCommandFeatureHandler(db provider.IDBProvider) *DefectCommandFeatureHandler {
+func NewDefectCommandFeature(db provider.IDBProvider) *DefectCommandFeatureHandler {
 	return &DefectCommandFeatureHandler{db: db}
 }
 

@@ -8,15 +8,15 @@ import (
 	"log"
 )
 
-type AreaQueryHandler struct {
+type AreaQueryFeatureImpl struct {
 	db provider.IDBProvider
 }
 
-func NewAreaFeatureHandler(db provider.IDBProvider) *AreaQueryHandler {
-	return &AreaQueryHandler{db: db}
+func NewAreaQueryFeature(db provider.IDBProvider) *AreaQueryFeatureImpl {
+	return &AreaQueryFeatureImpl{db: db}
 }
 
-func (handler *AreaQueryHandler) FetchAllAreas() (*[]entities.DArea, error) {
+func (handler *AreaQueryFeatureImpl) FetchAllAreas() (*[]entities.DArea, error) {
 	var tfo = new([]entities.DArea)
 	stmt := table.Places.SELECT(table.Places.AllColumns).FROM(table.Places)
 	if err := handler.db.Query(stmt, tfo); err != nil {
@@ -26,7 +26,7 @@ func (handler *AreaQueryHandler) FetchAllAreas() (*[]entities.DArea, error) {
 	return tfo, nil
 }
 
-func (handler *AreaQueryHandler) FetchAreaById(id int64) (*entities.DArea, error) {
+func (handler *AreaQueryFeatureImpl) FetchAreaById(id int64) (*entities.DArea, error) {
 	var tfo = new(entities.DArea)
 	stmt := table.Places.SELECT(table.Places.AllColumns).FROM(table.Places).
 		WHERE(table.Places.ID.EQ(postgres.Int64(id)))

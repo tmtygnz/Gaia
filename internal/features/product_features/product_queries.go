@@ -8,18 +8,18 @@ import (
 	"log"
 )
 
-type ProductFeatureHandler struct {
+type ProductQueryFeatureImpl struct {
 	db provider.IDBProvider
 }
 
-func NewProductFeatureHandler(db provider.IDBProvider) *ProductFeatureHandler {
-	return &ProductFeatureHandler{db: db}
+func NewProductQueryFeature(db provider.IDBProvider) *ProductQueryFeatureImpl {
+	return &ProductQueryFeatureImpl{db: db}
 }
 
 /*
 FetchAllProducts fetches all products in the database
 */
-func (handler *ProductFeatureHandler) FetchAllProducts() (*[]entities.DProduct, error) {
+func (handler *ProductQueryFeatureImpl) FetchAllProducts() (*[]entities.DProduct, error) {
 	var tfo = new([]entities.DProduct)
 	stmt := table.Products.SELECT(table.Products.AllColumns).FROM(table.Products)
 	if err := handler.db.Query(stmt, tfo); err != nil {
@@ -32,7 +32,7 @@ func (handler *ProductFeatureHandler) FetchAllProducts() (*[]entities.DProduct, 
 /*
 FetchProductById fetches product with the same id as the parameter
 */
-func (handler *ProductFeatureHandler) FetchProductById(id int64) (*entities.DProduct, error) {
+func (handler *ProductQueryFeatureImpl) FetchProductById(id int64) (*entities.DProduct, error) {
 	tfo := new(entities.DProduct)
 	stmt := table.Products.SELECT(table.Products.AllColumns).FROM(table.Products).
 		WHERE(table.Products.ID.EQ(postgres.Int64(id)))

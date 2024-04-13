@@ -9,17 +9,17 @@ import (
 	"strconv"
 )
 
-type AreaQueries interface {
+type AreaQueryFeature interface {
 	FetchAllAreas() (*[]entities.DArea, error)
 	FetchAreaById(id int64) (*entities.DArea, error)
 }
 
-type AreaRestHandler struct {
-	areaQueries *area_features.AreaQueryHandler
+type AreaRestImpl struct {
+	areaQueries *area_features.AreaQueryFeatureImpl
 }
 
-func NewAreaRestHandler(areaQueryHandler *area_features.AreaQueryHandler) {
-	handler := &AreaRestHandler{
+func NewAreaRestHandler(areaQueryHandler *area_features.AreaQueryFeatureImpl) {
+	handler := &AreaRestImpl{
 		areaQueryHandler,
 	}
 	http.HandleFunc("/area", handler.FetchAllAreaHandler)
@@ -28,7 +28,7 @@ func NewAreaRestHandler(areaQueryHandler *area_features.AreaQueryHandler) {
 	log.Println("Area rest handler created")
 }
 
-func (restHandler *AreaRestHandler) FetchAllAreaHandler(writer http.ResponseWriter, request *http.Request) {
+func (restHandler *AreaRestImpl) FetchAllAreaHandler(writer http.ResponseWriter, request *http.Request) {
 	switch request.Method {
 	case http.MethodGet:
 		areas, err := restHandler.areaQueries.FetchAllAreas()
@@ -40,7 +40,7 @@ func (restHandler *AreaRestHandler) FetchAllAreaHandler(writer http.ResponseWrit
 	}
 }
 
-func (restHandler *AreaRestHandler) FetchAreaByIdHandler(writer http.ResponseWriter, request *http.Request) {
+func (restHandler *AreaRestImpl) FetchAreaByIdHandler(writer http.ResponseWriter, request *http.Request) {
 	switch request.Method {
 	case http.MethodGet:
 		idStr := utils.GetRequestQuery(writer, request, "id")

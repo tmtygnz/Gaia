@@ -20,13 +20,13 @@ type DefectCommandFeature interface {
 	InsertDefect(defect *entities.DDefects) error
 }
 
-type DefectRestHandler struct {
+type DefectRestImpl struct {
 	defectQueryFeatureHandler   *defect_features.DefectQueryFeatureHandler
 	defectCommandFeatureHandler *defect_features.DefectCommandFeatureHandler
 }
 
 func NewDefectRestHandler(defectFeatHandler *defect_features.DefectQueryFeatureHandler, defectCommandHandler *defect_features.DefectCommandFeatureHandler) {
-	handler := &DefectRestHandler{
+	handler := &DefectRestImpl{
 		defectQueryFeatureHandler:   defectFeatHandler,
 		defectCommandFeatureHandler: defectCommandHandler,
 	}
@@ -37,7 +37,7 @@ func NewDefectRestHandler(defectFeatHandler *defect_features.DefectQueryFeatureH
 	log.Println("Defect rest handler created")
 }
 
-func (restHandler *DefectRestHandler) FetchAllDefectHandler(writer http.ResponseWriter, request *http.Request) {
+func (restHandler *DefectRestImpl) FetchAllDefectHandler(writer http.ResponseWriter, request *http.Request) {
 	if request.Method == http.MethodGet {
 		allDefects, err := restHandler.defectQueryFeatureHandler.FetchAllDefects()
 		if err != nil {
@@ -48,7 +48,7 @@ func (restHandler *DefectRestHandler) FetchAllDefectHandler(writer http.Response
 	}
 }
 
-func (restHandler *DefectRestHandler) FetchDefectByIdHandler(writer http.ResponseWriter, request *http.Request) {
+func (restHandler *DefectRestImpl) FetchDefectByIdHandler(writer http.ResponseWriter, request *http.Request) {
 	switch request.Method {
 	case http.MethodGet:
 		idStr := utils.GetRequestQuery(writer, request, "id")
@@ -70,7 +70,7 @@ func (restHandler *DefectRestHandler) FetchDefectByIdHandler(writer http.Respons
 	}
 }
 
-func (restHandler *DefectRestHandler) FetchFullTextSearchDefectHandler(writer http.ResponseWriter, request *http.Request) {
+func (restHandler *DefectRestImpl) FetchFullTextSearchDefectHandler(writer http.ResponseWriter, request *http.Request) {
 	switch request.Method {
 	case http.MethodGet:
 		queryStr := utils.GetRequestQuery(writer, request, "queryStr")
@@ -87,7 +87,7 @@ func (restHandler *DefectRestHandler) FetchFullTextSearchDefectHandler(writer ht
 	}
 }
 
-func (restHandler *DefectRestHandler) InsertDefectHandler(writer http.ResponseWriter, request *http.Request) {
+func (restHandler *DefectRestImpl) InsertDefectHandler(writer http.ResponseWriter, request *http.Request) {
 	switch request.Method {
 	case http.MethodPost:
 		defect := new(model.Defects)

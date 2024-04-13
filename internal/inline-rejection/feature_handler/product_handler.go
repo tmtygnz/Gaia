@@ -9,17 +9,17 @@ import (
 	"strconv"
 )
 
-type ProductFeature interface {
+type ProductQueryFeature interface {
 	FetchAllProducts() *[]entities.DProduct
 	FetchProductById(id int64) *entities.DProduct
 }
 
-type ProductRestHandler struct {
-	productFeatureHandler *product_features.ProductFeatureHandler
+type ProductRestImpl struct {
+	productFeatureHandler *product_features.ProductQueryFeatureImpl
 }
 
-func NewProductRestHandler(productFeatHandler *product_features.ProductFeatureHandler) {
-	handler := &ProductRestHandler{
+func NewProductRestHandler(productFeatHandler *product_features.ProductQueryFeatureImpl) {
+	handler := &ProductRestImpl{
 		productFeatureHandler: productFeatHandler,
 	}
 	http.HandleFunc("/product", handler.FetchAllProductHandler)
@@ -28,7 +28,7 @@ func NewProductRestHandler(productFeatHandler *product_features.ProductFeatureHa
 	log.Println("Product rest handler created")
 }
 
-func (restHandler *ProductRestHandler) FetchAllProductHandler(writer http.ResponseWriter, request *http.Request) {
+func (restHandler *ProductRestImpl) FetchAllProductHandler(writer http.ResponseWriter, request *http.Request) {
 	switch request.Method {
 	case http.MethodGet:
 		products, err := restHandler.productFeatureHandler.FetchAllProducts()
@@ -39,7 +39,7 @@ func (restHandler *ProductRestHandler) FetchAllProductHandler(writer http.Respon
 	}
 }
 
-func (restHandler *ProductRestHandler) FetchProductByIdHandler(writer http.ResponseWriter, request *http.Request) {
+func (restHandler *ProductRestImpl) FetchProductByIdHandler(writer http.ResponseWriter, request *http.Request) {
 	switch request.Method {
 	case http.MethodGet:
 		idStr := utils.GetRequestQuery(writer, request, "id")

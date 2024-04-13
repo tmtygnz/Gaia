@@ -13,10 +13,10 @@ import (
 
 func IRRestInterface(defectFeature *defect_features.DefectQueryFeatureHandler,
 	defectCommandFeature *defect_features.DefectCommandFeatureHandler,
-	productFeature *product_features.ProductFeatureHandler,
-	defectTypeFeature *defect_type_features.DefectTypeFeatureHandler,
-	packagingQueryFeature *packaging_features.PackagingQueryHandler,
-	areaQueryFeature *area_features.AreaQueryHandler) {
+	productFeature *product_features.ProductQueryFeatureImpl,
+	defectTypeFeature *defect_type_features.DefectTypeQueryFeatureImpl,
+	packagingQueryFeature *packaging_features.PackagingQueryFeatureImpl,
+	areaQueryFeature *area_features.AreaQueryFeatureImpl) {
 
 	feature_handler.NewDefectRestHandler(defectFeature, defectCommandFeature)
 	feature_handler.NewProductRestHandler(productFeature)

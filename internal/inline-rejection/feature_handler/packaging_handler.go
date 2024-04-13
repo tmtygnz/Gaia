@@ -9,17 +9,17 @@ import (
 	"strconv"
 )
 
-type PackagingQueries interface {
+type PackagingQueryFeature interface {
 	FetchAllPackaging() *[]entities.DPackaging
 	FetchPackagingById(id int64) *entities.DPackaging
 }
 
-type PackagingRestHandler struct {
-	packagingQueryHandler *packaging_features.PackagingQueryHandler
+type PackagingRestImpl struct {
+	packagingQueryHandler *packaging_features.PackagingQueryFeatureImpl
 }
 
-func NewPackagingRestHandler(packagingQueryHandler *packaging_features.PackagingQueryHandler) {
-	handler := &PackagingRestHandler{
+func NewPackagingRestHandler(packagingQueryHandler *packaging_features.PackagingQueryFeatureImpl) {
+	handler := &PackagingRestImpl{
 		packagingQueryHandler,
 	}
 	http.HandleFunc("/packaging", handler.FetchAllPackagingHandler)
@@ -28,7 +28,7 @@ func NewPackagingRestHandler(packagingQueryHandler *packaging_features.Packaging
 	log.Println("Packaging rest handler created")
 }
 
-func (restHandler *PackagingRestHandler) FetchAllPackagingHandler(writer http.ResponseWriter, request *http.Request) {
+func (restHandler *PackagingRestImpl) FetchAllPackagingHandler(writer http.ResponseWriter, request *http.Request) {
 	switch request.Method {
 	case http.MethodGet:
 		packaging, err := restHandler.packagingQueryHandler.FetchAllPackaging()
@@ -39,7 +39,7 @@ func (restHandler *PackagingRestHandler) FetchAllPackagingHandler(writer http.Re
 	}
 }
 
-func (restHandler *PackagingRestHandler) FetchPackagingByIdHandler(writer http.ResponseWriter, request *http.Request) {
+func (restHandler *PackagingRestImpl) FetchPackagingByIdHandler(writer http.ResponseWriter, request *http.Request) {
 	switch request.Method {
 	case http.MethodGet:
 		idStr := utils.GetRequestQuery(writer, request, "id")

@@ -8,15 +8,15 @@ import (
 	"log"
 )
 
-type PackagingQueryHandler struct {
+type PackagingQueryFeatureImpl struct {
 	db *provider.DBProvider
 }
 
-func NewPackagingTypeQueriesHandler(db *provider.DBProvider) *PackagingQueryHandler {
-	return &PackagingQueryHandler{db: db}
+func NewPackagingTypeQuery(db *provider.DBProvider) *PackagingQueryFeatureImpl {
+	return &PackagingQueryFeatureImpl{db: db}
 }
 
-func (handler *PackagingQueryHandler) FetchAllPackaging() (*[]entities.DPackaging, error) {
+func (handler *PackagingQueryFeatureImpl) FetchAllPackaging() (*[]entities.DPackaging, error) {
 	var tfo = new([]entities.DPackaging)
 	stmt := table.PackagingType.SELECT(table.PackagingType.AllColumns).FROM(table.PackagingType)
 	if err := handler.db.Query(stmt, tfo); err != nil {
@@ -26,7 +26,7 @@ func (handler *PackagingQueryHandler) FetchAllPackaging() (*[]entities.DPackagin
 	return tfo, nil
 }
 
-func (handler *PackagingQueryHandler) FetchPackagingById(id int64) (*entities.DPackaging, error) {
+func (handler *PackagingQueryFeatureImpl) FetchPackagingById(id int64) (*entities.DPackaging, error) {
 	var tfo = new(entities.DPackaging)
 	stmt := table.PackagingType.SELECT(table.PackagingType.AllColumns).FROM(table.PackagingType).
 		WHERE(table.PackagingType.ID.EQ(postgres.Int64(id)))

@@ -27,13 +27,13 @@ func startup() {
 func main() {
 	startup()
 	databaseInstance := provider.NewDatabase()
-	defectFeatureHandler := defect_features.NewDefectQueryFeatureHandler(databaseInstance)
-	defectCommandFeatureHandler := defect_features.NewDefectCommandFeatureHandler(databaseInstance)
-	productFeatureHandler := product_features.NewProductFeatureHandler(databaseInstance)
-	defectTypeFeatureHandler := defect_type_features.NewDefectTypeFeatureHandler(databaseInstance)
-	packagingQueryFeatureHandler := packaging_features.NewPackagingTypeQueriesHandler(databaseInstance)
-	areaQueryFeatureHandler := area_features.NewAreaFeatureHandler(databaseInstance)
+	defectQueryFeatureHandler := defect_features.NewDefectQueryFeature(databaseInstance)
+	defectCommandFeatureHandler := defect_features.NewDefectCommandFeature(databaseInstance)
+	productQueryFeatureHandler := product_features.NewProductQueryFeature(databaseInstance)
+	defectTypeQueryFeatureHandler := defect_type_features.NewDefectTypeQueryFeature(databaseInstance)
+	packagingQueryFeatureHandler := packaging_features.NewPackagingTypeQuery(databaseInstance)
+	areaQueryFeatureHandler := area_features.NewAreaQueryFeature(databaseInstance)
 
-	inline_rejection.IRRestInterface(defectFeatureHandler, defectCommandFeatureHandler, productFeatureHandler, defectTypeFeatureHandler,
+	inline_rejection.IRRestInterface(defectQueryFeatureHandler, defectCommandFeatureHandler, productQueryFeatureHandler, defectTypeQueryFeatureHandler,
 		packagingQueryFeatureHandler, areaQueryFeatureHandler)
 }
