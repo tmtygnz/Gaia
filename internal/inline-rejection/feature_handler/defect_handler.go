@@ -3,6 +3,7 @@ package feature_handler
 import (
 	"gaia/internal/entities"
 	defect_features "gaia/internal/features/defect_features"
+	"gaia/internal/jet/postgres/public/model"
 	"gaia/utils"
 	"log"
 	"net/http"
@@ -15,13 +16,19 @@ type DefectQueryFeature interface {
 	FullTextSearchDefects(query string) (*[]entities.DDefects, error)
 }
 
-type DefectRestHandler struct {
-	defectFeatureHandler *defect_features.DefectQueryFeatureHandler
+type DefectCommandFeature interface {
+	InsertDefect(defect *entities.DDefects) error
 }
 
-func NewDefectRestHandler(defectFeatHandler *defect_features.DefectQueryFeatureHandler) {
+type DefectRestHandler struct {
+	defectQueryFeatureHandler   *defect_features.DefectQueryFeatureHandler
+	defectCommandFeatureHandler *defect_features.DefectCommandFeatureHandler
+}
+
+func NewDefectRestHandler(defectFeatHandler *defect_features.DefectQueryFeatureHandler, defectCommandHandler *defect_features.DefectCommandFeatureHandler) {
 	handler := &DefectRestHandler{
-		defectFeatureHandler: defectFeatHandler,
+		defectQueryFeatureHandler:   defectFeatHandler,
+		defectCommandFeatureHandler: defectCommandHandler,
 	}
 	http.HandleFunc("/defect", handler.FetchAllDefectHandler)
 	http.HandleFunc("/defect/by/{id}", handler.FetchDefectByIdHandler)
@@ -32,7 +39,7 @@ func NewDefectRestHandler(defectFeatHandler *defect_features.DefectQueryFeatureH
 
 func (restHandler *DefectRestHandler) FetchAllDefectHandler(writer http.ResponseWriter, request *http.Request) {
 	if request.Method == http.MethodGet {
-		allDefects, err := restHandler.defectFeatureHandler.FetchAllDefects()
+		allDefects, err := restHandler.defectQueryFeatureHandler.FetchAllDefects()
 		if err != nil {
 			http.Error(writer, err.Error(), http.StatusInternalServerError)
 		}
@@ -54,7 +61,7 @@ func (restHandler *DefectRestHandler) FetchDefectByIdHandler(writer http.Respons
 			http.Error(writer, "Invalid id type", http.StatusInternalServerError)
 		}
 
-		defect, err := restHandler.defectFeatureHandler.FetchDefectById(int64(id))
+		defect, err := restHandler.defectQueryFeatureHandler.FetchDefectById(int64(id))
 		if err != nil {
 			http.Error(writer, err.Error(), http.StatusInternalServerError)
 		}
@@ -71,11 +78,29 @@ func (restHandler *DefectRestHandler) FetchFullTextSearchDefectHandler(writer ht
 			return
 		}
 
-		defects, err := restHandler.defectFeatureHandler.FullTextSearchDefects(*queryStr)
+		defects, err := restHandler.defectQueryFeatureHandler.FullTextSearchDefects(*queryStr)
 		if err != nil {
 			http.Error(writer, err.Error(), http.StatusInternalServerError)
 		}
 
 		utils.Send(writer, &defects, "application/json")
+	}
+}
+
+func (restHandler *DefectRestHandler) InsertDefectHandler(writer http.ResponseWriter, request *http.Request) {
+	switch request.Method {
+	case http.MethodPost:
+		defect := new(model.Defects)
+		err := utils.ReadBody(writer, request, defect)
+		if err != nil {
+			return
+		}
+
+		err = restHandler.defectCommandFeatureHandler.InsertDefect(defect)
+		if err != nil {
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+		}
+
+		utils.Send(writer, &defect, "application/json")
 	}
 }
