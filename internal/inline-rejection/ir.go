@@ -11,6 +11,7 @@ import (
 	"net/http"
 )
 
+// TODO: Move these parameters in a interface or struct
 func IRRestInterface(defectFeature *defect_features.DefectQueryFeatureHandler,
 	defectCommandFeature *defect_features.DefectCommandFeatureHandler,
 	productFeature *product_features.ProductQueryFeatureImpl,
@@ -28,6 +29,9 @@ func IRRestInterface(defectFeature *defect_features.DefectQueryFeatureHandler,
 
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
-		log.Panic("Server didn't start", err)
+		// Just return if it errors out
+		// TODO: Save logs to disk if possible
+		log.Println("Server didn't start", err)
+		return
 	}
 }
